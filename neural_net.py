@@ -13,14 +13,15 @@ def dsigmoid(y):
 	''' the 'x' values already underwent sigmoid '''
 	return y * (1 - y)
 
-
-def log_time(func, *args, **kwargs):
-	def wrapper():
+def log_time(func):
+	def wrapper(*args, **kwargs):
 		start = time.time()
 		out = func(*args, **kwargs)
 		end = time.time() - start
 		print(f'Time to run "{func}": {end}')
 		return out
+		
+	return wrapper
 
 
 class NeuralNetwork:
