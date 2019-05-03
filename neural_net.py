@@ -4,6 +4,7 @@ import numpy as np
 import random as rd
 from collections import namedtuple as nt
 import datetime
+import time
 
 def sigmoid(v):
 	return 1 / (1 + np.exp(-v))
@@ -11,6 +12,15 @@ def sigmoid(v):
 def dsigmoid(y):
 	''' the 'x' values already underwent sigmoid '''
 	return y * (1 - y)
+
+
+def log_time(func, *args, **kwargs):
+	def wrapper():
+		start = time.time()
+		out = func(*args, **kwargs)
+		end = time.time() - start
+		print(f'Time to run "{func}": {end}')
+		return out
 
 
 class NeuralNetwork:
