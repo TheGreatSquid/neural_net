@@ -3,7 +3,18 @@ import math
 import numpy as np
 import random as rd
 from collections import namedtuple as nt
-import datetime
+import time
+
+
+def log_time(func):
+	def wrapper(*args, **kwargs):
+		start = time.time()
+		out = func(*args, **kwargs)
+		end = time.time() - start
+		print(f'Time to run "{func}": {end}')
+		return out
+		
+	return wrapper
 
 def sigmoid(v):
 	return 1 / (1 + np.exp(-v))
@@ -88,17 +99,17 @@ class Datum:
 
 def main():
 	brain = NeuralNetwork(2, 50, 1)
-	data_s = datetime.datetime.now()
+	data_s = time.time()
 	training_data = [
 		Datum([0, 0], [0]), 
 		Datum([0, 1], [1]), 
 		Datum([1, 0], [1]), 
 		Datum([1, 1], [0]), 
 	]
-	data_e = datetime.datetime.now()
+	data_e = time.time()
 	print(data_e - data_s)
 	
-	start = datetime.datetime.now()
+	start = time.time()
 	
 	training_matrix = np.array([[
 								[[[0], [0]], [[0]]], 
@@ -131,7 +142,7 @@ def main():
 	print(brain.feed_forward(list(d.inputs.ravel())))	
 	'''
 	
-	end = datetime.datetime.now()
+	end = time.time()
 	print(end - start)
 	
 
