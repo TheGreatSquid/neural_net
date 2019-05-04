@@ -36,7 +36,7 @@ class Display (Scene):
 		self.img = self.img.rotate(90)
 		self.img = self.img.convert('1')
 		self.img.show()
-		self.img.save(f'images/{id}/{rd.random()}.png')
+		self.img.save(f'training_images/{id}/{rd.random()}.png')
 			
 				
 	def touch_began(self, touch):
