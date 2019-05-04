@@ -49,24 +49,24 @@ class NeuralNetwork:
 	def feed_forward(self, input_arr):
 		''' send inputs through NN and returns output values '''
 		# generate hidden layer neuron values
-		print(input_arr)		
+		#print(input_arr)		
 		input_mat = np.reshape(input_arr, [self.num_in,1])
-		print('weights in hidden')
-		print(self.weights_in_hid)
+		#print('weights in hidden')
+		#print(self.weights_in_hid)
 		hidden = self.weights_in_hid.dot(input_mat)
-		print('bias hidden')
-		print(self.bias_hid)
+		#print('bias hidden')
+		#print(self.bias_hid)
 		hidden += self.bias_hid
-		print('before sigmoid')
-		print(hidden)
+		#print('before sigmoid')
+		#print(hidden)
 		hidden = sigmoid(hidden)
-		print('after sigmoid')
-		print(hidden)
+		#print('after sigmoid')
+		#print(hidden)
 		# generate output neuron values
 		output = self.weights_hid_out.dot(hidden)
 		output += self.bias_out
-		print('out before sig')
-		print(output)
+		#print('out before sig')
+		#print(output)
 		output = sigmoid(output)
 		# return output in array form
 		return output.flatten()
@@ -116,7 +116,7 @@ class Datum:
 		self.targets = np.reshape(targets, [len(targets), 1])
 
 def main():
-	brain = NeuralNetwork(784, 100, 10)
+	brain = NeuralNetwork(784, 50, 10)
 	data_s = time.time()
 	
 	img_data = []
@@ -142,7 +142,7 @@ def main():
 	
 	start = time.time()
 	# train
-	for _ in range(5000):
+	for _ in range(10000):
 		datum = rd.choice(img_data)
 		brain.train(datum.inputs, datum.targets)
 	
@@ -150,11 +150,16 @@ def main():
 	test_img = Image.open('test_1.png')
 	test_in = list(np.array(test_img.getdata()) / 255)
 	print('test 1')
-	print(brain.feed_forward(test_in))
+	out = brain.feed_forward(test_in)
+	prediction = np.where(out == max(out))
+	print(prediction[0])
+	
 	test_img = Image.open('test_6.png')
 	test_in = list(np.array(test_img.getdata()) / 255)	
 	print('test 6')
-	print(brain.feed_forward(test_in))
+	out = brain.feed_forward(test_in)
+	prediction = np.where(out == max(out))
+	print(prediction[0])
 	
 	end = time.time()
 	print(end - start)
