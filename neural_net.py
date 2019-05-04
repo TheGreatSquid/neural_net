@@ -1,9 +1,11 @@
 
+from collections import namedtuple as nt
+from PIL import Image, ImageDraw
 import math
 import numpy as np
 import random as rd
-from collections import namedtuple as nt
 import time
+import os
 
 
 def log_time(func):
@@ -36,7 +38,7 @@ class NeuralNetwork:
 		self.bias_hid = np.random.rand(self.num_hid, 1)
 		self.bias_out = np.random.rand(self.num_out, 1)
 		
-		self.learning_rate = 0.5
+		self.learning_rate = 0.1
 		
 	def feed_forward(self, input_arr):
 		''' send inputs through NN and returns output values '''
@@ -98,8 +100,23 @@ class Datum:
 		self.targets = np.reshape(targets, [len(targets), 1])
 
 def main():
-	brain = NeuralNetwork(2, 50, 1)
+	brain = NeuralNetwork(784, 500, 10)
 	data_s = time.time()
+	
+	img_data = []
+	for subdir, dirs, files in os.walk('training_images/'):
+		for file in files:
+			if file == 'readme.txt':
+				continue
+			p = os.path.join(subdir, file)
+			img = Image.open(p)
+			inputs = np.array(img.getdata()) / 255
+			targets = [0 for _ in range(10)]
+			targets[int(subdir[-1])] = 1
+			d = Datum(inputs, targets)
+			img_data.append(d)
+	
+	
 	training_data = [
 		Datum([0, 0], [0]), 
 		Datum([0, 1], [1]), 
@@ -110,36 +127,21 @@ def main():
 	print(data_e - data_s)
 	
 	start = time.time()
-	
-	training_matrix = np.array([[
-								[[[0], [0]], [[0]]], 
-								[[[0], [1]], [[1]]], 
-								[[[1], [0]], [[1]]], 
-								[[[1], [1]], [[0]]], 
-								]])
 
-	training_matrix = np.repeat(training_matrix, 100, axis=0).reshape(400, 2)
-
-	input_mat = training_matrix[...,0]	
-	target_mat = training_matrix[...,1]
-	
-	
-	#brain.train(input_mat, target_mat)
-
-	for _ in range(50000):
-		datum = rd.choice(training_data)		
+	for _ in range(5000):
+		datum = rd.choice(img_data)
 		brain.train(datum.inputs, datum.targets)
-			
 	
+			
+	test_img = Image.open('test_6.png')
+	test_in = list(test_img.getdata())		
+	print(brain.feed_forward(test_in))
+	print(brain.weights_hid_out)
+	'''
 	print(brain.feed_forward([0, 0]))
 	print(brain.feed_forward([1, 0]))
 	print(brain.feed_forward([0, 1]))
 	print(brain.feed_forward([1, 1]))
-	
-	'''
-	d = Datum(None, None)
-	print(d.targets)
-	print(brain.feed_forward(list(d.inputs.ravel())))	
 	'''
 	
 	end = time.time()
