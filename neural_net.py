@@ -38,19 +38,27 @@ class NeuralNetwork:
 		self.bias_hid = np.random.rand(self.num_hid, 1)
 		self.bias_out = np.random.rand(self.num_out, 1)
 		
-		self.learning_rate = 0.1
+		self.learning_rate = 1
 		
 	def feed_forward(self, input_arr):
 		''' send inputs through NN and returns output values '''
 		# generate hidden layer neuron values
-		
+		# print(input_arr)		
 		input_mat = np.reshape(input_arr, [self.num_in,1])
+		# print('weights in hidden')
+		# print(self.weights_in_hid)
 		hidden = self.weights_in_hid.dot(input_mat)
 		hidden += self.bias_hid
+		# print('before sigmoid')
+		# print(hidden)
 		hidden = sigmoid(hidden)
+		# print('after sigmoid')
+		# print(hidden)
 		# generate output neuron values
 		output = self.weights_hid_out.dot(hidden)
 		output += self.bias_out
+		# print('out before sig')
+		# print(output)
 		output = sigmoid(output)
 		# return output in array form
 		return output.flatten()
@@ -100,11 +108,16 @@ class Datum:
 		self.targets = np.reshape(targets, [len(targets), 1])
 
 def main():
-	brain = NeuralNetwork(784, 500, 10)
+	brain = NeuralNetwork(784, 50, 10)
 	data_s = time.time()
 	
 	img_data = []
 	for subdir, dirs, files in os.walk('training_images/'):
+		# just for testing purposes
+		if subdir[-1] == '/':
+			continue
+		if int(subdir[-1]) > 6:
+			continue
 		for file in files:
 			if file == 'readme.txt':
 				continue
@@ -116,33 +129,24 @@ def main():
 			d = Datum(inputs, targets)
 			img_data.append(d)
 	
-	
-	training_data = [
-		Datum([0, 0], [0]), 
-		Datum([0, 1], [1]), 
-		Datum([1, 0], [1]), 
-		Datum([1, 1], [0]), 
-	]
 	data_e = time.time()
 	print(data_e - data_s)
 	
 	start = time.time()
-
+	# train
 	for _ in range(5000):
 		datum = rd.choice(img_data)
 		brain.train(datum.inputs, datum.targets)
 	
-			
-	test_img = Image.open('test_6.png')
-	test_in = list(test_img.getdata())		
+	# test		
+	test_img = Image.open('test_1.png')
+	test_in = list(np.array(test_img.getdata()) / 255)
+	print('test 1')
 	print(brain.feed_forward(test_in))
-	print(brain.weights_hid_out)
-	'''
-	print(brain.feed_forward([0, 0]))
-	print(brain.feed_forward([1, 0]))
-	print(brain.feed_forward([0, 1]))
-	print(brain.feed_forward([1, 1]))
-	'''
+	test_img = Image.open('test_6.png')
+	test_in = list(np.array(test_img.getdata()) / 255)	
+	print('test 6')
+	print(brain.feed_forward(test_in))
 	
 	end = time.time()
 	print(end - start)
