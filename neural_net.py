@@ -7,7 +7,6 @@ import random as rd
 import time
 import os
 
-
 def log_time(func):
 	def wrapper(*args, **kwargs):
 		start = time.time()
@@ -18,12 +17,19 @@ def log_time(func):
 		
 	return wrapper
 
+
 def sigmoid(v):
 	return 1 / (1 + np.exp(-v))
 	
 def dsigmoid(y):
 	''' the 'x' values already underwent sigmoid '''
 	return y * (1 - y)
+
+def tanh(v):
+	return np.tanh(v)
+
+def dtanh(y):
+	return 1 - y*y
 
 
 class NeuralNetwork:
@@ -32,33 +38,35 @@ class NeuralNetwork:
 		self.num_hid = num_hid
 		self.num_out = num_out
 		
-		self.weights_in_hid = np.random.rand(self.num_hid, self.num_in)
-		self.weights_hid_out = np.random.rand(self.num_out, self.num_hid)
+		self.weights_in_hid = np.random.rand(self.num_hid, self.num_in) / 10
+		self.weights_hid_out = np.random.rand(self.num_out, self.num_hid) / 10
 		
-		self.bias_hid = np.random.rand(self.num_hid, 1)
-		self.bias_out = np.random.rand(self.num_out, 1)
+		self.bias_hid = np.random.rand(self.num_hid, 1) / 10
+		self.bias_out = np.random.rand(self.num_out, 1) / 10
 		
-		self.learning_rate = 1
+		self.learning_rate = .1
 		
 	def feed_forward(self, input_arr):
 		''' send inputs through NN and returns output values '''
 		# generate hidden layer neuron values
-		# print(input_arr)		
+		print(input_arr)		
 		input_mat = np.reshape(input_arr, [self.num_in,1])
-		# print('weights in hidden')
-		# print(self.weights_in_hid)
+		print('weights in hidden')
+		print(self.weights_in_hid)
 		hidden = self.weights_in_hid.dot(input_mat)
+		print('bias hidden')
+		print(self.bias_hid)
 		hidden += self.bias_hid
-		# print('before sigmoid')
-		# print(hidden)
+		print('before sigmoid')
+		print(hidden)
 		hidden = sigmoid(hidden)
-		# print('after sigmoid')
-		# print(hidden)
+		print('after sigmoid')
+		print(hidden)
 		# generate output neuron values
 		output = self.weights_hid_out.dot(hidden)
 		output += self.bias_out
-		# print('out before sig')
-		# print(output)
+		print('out before sig')
+		print(output)
 		output = sigmoid(output)
 		# return output in array form
 		return output.flatten()
@@ -108,7 +116,7 @@ class Datum:
 		self.targets = np.reshape(targets, [len(targets), 1])
 
 def main():
-	brain = NeuralNetwork(784, 50, 10)
+	brain = NeuralNetwork(784, 100, 10)
 	data_s = time.time()
 	
 	img_data = []
