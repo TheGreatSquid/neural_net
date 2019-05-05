@@ -1,10 +1,11 @@
 
+from collections import namedtuple as nt
+from PIL import Image, ImageDraw
 import math
 import numpy as np
 import random as rd
-from collections import namedtuple as nt
 import time
-
+import os
 
 def log_time(func):
 	def wrapper(*args, **kwargs):
@@ -16,12 +17,19 @@ def log_time(func):
 		
 	return wrapper
 
+
 def sigmoid(v):
 	return 1 / (1 + np.exp(-v))
 	
 def dsigmoid(y):
 	''' the 'x' values already underwent sigmoid '''
 	return y * (1 - y)
+
+def tanh(v):
+	return np.tanh(v)
+
+def dtanh(y):
+	return 1 - y*y
 
 
 class NeuralNetwork:
@@ -30,18 +38,17 @@ class NeuralNetwork:
 		self.num_hid = num_hid
 		self.num_out = num_out
 		
-		self.weights_in_hid = np.random.rand(self.num_hid, self.num_in)
-		self.weights_hid_out = np.random.rand(self.num_out, self.num_hid)
+		self.weights_in_hid = np.random.rand(self.num_hid, self.num_in) / 10
+		self.weights_hid_out = np.random.rand(self.num_out, self.num_hid) / 10
 		
-		self.bias_hid = np.random.rand(self.num_hid, 1)
-		self.bias_out = np.random.rand(self.num_out, 1)
+		self.bias_hid = np.random.rand(self.num_hid, 1) / 10
+		self.bias_out = np.random.rand(self.num_out, 1) / 10
 		
-		self.learning_rate = 0.5
+		self.learning_rate = .1
 		
 	def feed_forward(self, input_arr):
 		''' send inputs through NN and returns output values '''
 		# generate hidden layer neuron values
-		
 		input_mat = np.reshape(input_arr, [self.num_in,1])
 		hidden = self.weights_in_hid.dot(input_mat)
 		hidden += self.bias_hid
@@ -98,49 +105,50 @@ class Datum:
 		self.targets = np.reshape(targets, [len(targets), 1])
 
 def main():
-	brain = NeuralNetwork(2, 50, 1)
+	brain = NeuralNetwork(784, 50, 10)
 	data_s = time.time()
-	training_data = [
-		Datum([0, 0], [0]), 
-		Datum([0, 1], [1]), 
-		Datum([1, 0], [1]), 
-		Datum([1, 1], [0]), 
-	]
+	
+	img_data = []
+	for subdir, dirs, files in os.walk('training_images/'):
+		# just for testing purposes
+		if subdir[-1] == '/':
+			continue
+		if int(subdir[-1]) > 6:
+			continue
+		for file in files:
+			if file == 'readme.txt':
+				continue
+			p = os.path.join(subdir, file)
+			img = Image.open(p)
+			inputs = np.array(img.getdata()) / 255
+			targets = [0 for _ in range(10)]
+			targets[int(subdir[-1])] = 1
+			d = Datum(inputs, targets)
+			img_data.append(d)
+	
 	data_e = time.time()
 	print(data_e - data_s)
 	
 	start = time.time()
-	
-	training_matrix = np.array([[
-								[[[0], [0]], [[0]]], 
-								[[[0], [1]], [[1]]], 
-								[[[1], [0]], [[1]]], 
-								[[[1], [1]], [[0]]], 
-								]])
-
-	training_matrix = np.repeat(training_matrix, 100, axis=0).reshape(400, 2)
-
-	input_mat = training_matrix[...,0]	
-	target_mat = training_matrix[...,1]
-	
-	
-	#brain.train(input_mat, target_mat)
-
-	for _ in range(50000):
-		datum = rd.choice(training_data)		
+	# train
+	for _ in range(10000):
+		datum = rd.choice(img_data)
 		brain.train(datum.inputs, datum.targets)
-			
 	
-	print(brain.feed_forward([0, 0]))
-	print(brain.feed_forward([1, 0]))
-	print(brain.feed_forward([0, 1]))
-	print(brain.feed_forward([1, 1]))
+	# test		
+	test_img = Image.open('test_1.png')
+	test_in = list(np.array(test_img.getdata()) / 255)
+	print('test 1')
+	out = brain.feed_forward(test_in)
+	prediction = np.where(out == max(out))
+	print(prediction[0])
 	
-	'''
-	d = Datum(None, None)
-	print(d.targets)
-	print(brain.feed_forward(list(d.inputs.ravel())))	
-	'''
+	test_img = Image.open('test_6.png')
+	test_in = list(np.array(test_img.getdata()) / 255)	
+	print('test 6')
+	out = brain.feed_forward(test_in)
+	prediction = np.where(out == max(out))
+	print(prediction[0])
 	
 	end = time.time()
 	print(end - start)
