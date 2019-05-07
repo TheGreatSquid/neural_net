@@ -31,10 +31,9 @@ class NeuralNetwork:
 		
 		self.learning_rate = .1
 	
-  def prepare(arr):
-    return np.reshape(len(arr), 1)
-  
-  
+	def prepare(self, arr):
+		return np.reshape(arr, (len(arr), 1))
+	
 	def feed_forward(self, input_arr):
 		''' send inputs through NN and returns output values '''
 		# generate hidden layer neuron values
