@@ -14,7 +14,7 @@ def main():
 	
 	global buttons
 	for i in range(10):
-		b = tk.Button(root, bg='gray')
+		b = tk.Button(root, text=f'{i}', bg='gray')
 		b.place(relx=.7, rely=.09*i, relwidth=.2, relheight=.1)
 	
 	
