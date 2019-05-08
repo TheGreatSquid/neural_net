@@ -11,6 +11,7 @@ import os
 
 Datum = nt('Datum', 'inputs, targets')
 
+
 def main():
 	brain = nn.NeuralNetwork(784, 50, 10)
 	data_s = time.time()
@@ -42,7 +43,7 @@ def main():
 		datum = rd.choice(img_data)
 		brain.train(datum.inputs, datum.targets)
 	
-	# test		
+	# test
 	test_img = Image.open('test_1.png')
 	test_in = list(np.array(test_img.getdata()) / 255)
 	print('test 1')
@@ -51,7 +52,7 @@ def main():
 	print(prediction[0])
 	
 	test_img = Image.open('test_6.png')
-	test_in = list(np.array(test_img.getdata()) / 255)	
+	test_in = list(np.array(test_img.getdata()) / 255)
 	print('test 6')
 	out = brain.feed_forward(test_in)
 	prediction = np.where(out == max(out))
@@ -61,4 +62,5 @@ def main():
 	print(end - start)
 	
 
-if __name__ == '__main__': main()
+if __name__ == '__main__': 
+	main()
