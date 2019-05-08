@@ -1,13 +1,13 @@
 import numpy as np
 import tkinter as tk
 
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 1000, 800
 buttons = []
 
 def main():
 	root = tk.Tk()
 	cv = tk.Canvas(root, width=WIDTH, height=HEIGHT, bd=5, bg='gray')
-	cv.pack()
+	cv.place(x=0, y=0, relwidth=1, relheight=1)
 	
 	draw_area = tk.Canvas(root, bg='white')
 	draw_area.place(relx=.1, rely=.1, width=280, height=280)
