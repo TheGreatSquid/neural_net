@@ -10,7 +10,7 @@ def main():
 	cv.place(x=0, y=0, relwidth=1, relheight=1)
 	
 	draw_area = tk.Canvas(root, bg='white')
-	draw_area.place(relx=.1, rely=.1, width=280, height=280)
+	draw_area.place(relx=.3, rely=.3, width=280, height=280)
 	
 	global buttons
 	for i in range(10):
