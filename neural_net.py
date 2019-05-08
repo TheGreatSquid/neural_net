@@ -9,10 +9,7 @@ import time
 import os
 		
 
-class Datum:
-	def __init__(self, inputs, targets):
-		self.inputs = np.reshape(inputs, [len(inputs), 1])
-		self.targets = np.reshape(targets, [len(targets), 1])
+Datum = nt('Datum', 'inputs, targets')
 
 def main():
 	brain = nn.NeuralNetwork(784, 50, 10)
@@ -31,11 +28,9 @@ def main():
 			p = os.path.join(subdir, file)
 			img = Image.open(p)
 			inputs = np.array(img.getdata()) / 255
-			inputs = brain.prepare(inputs)
 			targets = [0 for _ in range(10)]
 			targets[int(subdir[-1])] = 1
-			targets = brain.prepare(targets)
-			d = (inputs, targets)
+			d = Datum(brain.prepare(inputs), brain.prepare(targets))
 			img_data.append(d)
 	
 	data_e = time.time()
@@ -45,7 +40,7 @@ def main():
 	# train
 	for _ in range(10000):
 		datum = rd.choice(img_data)
-		brain.train(datum[0], datum[1])
+		brain.train(datum.inputs, datum.targets)
 	
 	# test		
 	test_img = Image.open('test_1.png')
