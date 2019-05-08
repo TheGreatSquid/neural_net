@@ -4,6 +4,11 @@ import tkinter as tk
 WIDTH, HEIGHT = 1000, 800
 buttons = []
 
+
+def drawtest(event):
+	x, y = event.x, event.y
+	print(f'clicked at {(x, y)}')
+
 def main():
 	root = tk.Tk()
 	cv = tk.Canvas(root, width=WIDTH, height=HEIGHT, bd=5, bg='gray')
@@ -11,6 +16,7 @@ def main():
 	
 	draw_area = tk.Canvas(root, bg='white')
 	draw_area.place(relx=.3, rely=.3, width=280, height=280)
+	draw_area.bind("<Button-1>", drawtest)
 	
 	global buttons
 	for i in range(10):
