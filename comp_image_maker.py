@@ -1,6 +1,7 @@
 import numpy as np
 import tkinter as tk
 
+
 WIDTH, HEIGHT = 1000, 800
 buttons = []
 
