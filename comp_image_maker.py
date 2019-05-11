@@ -10,7 +10,7 @@ matrix = np.zeros((28,28))
 
 
 
-def save_image(event, id):
+def save_image(id):
 	global matrix
 	tag = rd.random()
 	matrix = (matrix * 255).astype(np.uint8)
@@ -48,7 +48,7 @@ def main():
 	for i in range(10):
 		b = tk.Button(root, text=f'{i}', bg='gray')
 		b.place(relx=.7, rely=.09*i, relwidth=.2, relheight=.1)
-		b.bind("<Button-1>", lambda event: save_image(event, id=i))
+		b.bind("<Button-1>", command=lambda: save_image(id=i))
 	
 	
 	root.mainloop()
