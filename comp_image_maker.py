@@ -11,7 +11,7 @@ matrix = np.zeros((28,28))
 
 
 
-def save_image(id):
+def save_image(draw_area, id):
 	global matrix
 	tag = rd.random()
 	matrix = (matrix * 255).astype(np.uint8)
@@ -21,6 +21,7 @@ def save_image(id):
 	img.save(f'training_images/{id}/{tag}.png')
 	print(tag)
 	
+	draw_area.delete("all")
 	matrix = np.zeros_like(matrix)
 
 
@@ -47,7 +48,7 @@ def main():
 	
 	global buttons
 	for i in range(10):
-		with_arg = partial(save_image, i)
+		with_arg = partial(save_image, draw_area, i)
 		b = tk.Button(root, text=f'{i}', bg='gray', command=with_arg)
 		b.place(relx=.7, rely=.09*i, relwidth=.2, relheight=.1)	
 	
