@@ -10,14 +10,14 @@ matrix = np.zeros((28,28))
 
 
 
-def save_image(event, i):
+def save_image(event, id):
 	global matrix
 	tag = rd.random()
 	matrix = (matrix * 255).astype(np.uint8)
 	img = Image.fromarray(matrix, mode='L')
 	img = img.convert('1')
 	img.show()
-	img.save(f'training_images/{i}/{tag}.png')
+	img.save(f'training_images/{id}/{tag}.png')
 	print(tag)
 	
 	matrix = np.zeros_like(matrix)
@@ -48,7 +48,7 @@ def main():
 	for i in range(10):
 		b = tk.Button(root, text=f'{i}', bg='gray')
 		b.place(relx=.7, rely=.09*i, relwidth=.2, relheight=.1)
-		b.bind("<Button-1>", lambda event: save_image(i))
+		b.bind("<Button-1>", lambda: save_image(id=i))
 	
 	
 	root.mainloop()
