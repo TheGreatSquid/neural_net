@@ -1,6 +1,6 @@
 
 from collections import namedtuple as nt
-from PIL import Image, ImageDraw
+from PIL import Image
 import neural_net_mod as nn
 import math
 import numpy as np
