@@ -8,6 +8,8 @@ buttons = []
 
 def drawtest(event):
 	x, y = event.x, event.y
+	w = event.widget
+	o = w.create_oval(x-5, y-5, x+5, y+5, fill='black')
 	print(f'clicked at {(x, y)}')
 
 def main():

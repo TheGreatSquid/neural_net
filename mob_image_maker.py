@@ -31,12 +31,13 @@ class Display (Scene):
 		self.dots = []
 	
 	def save_image(self, id):
+		tag = rd.random()
 		self.matrix = (self.matrix * 255).astype(np.uint8)
-		self.img = Image.fromarray(self.matrix, mode='L')	
-		self.img = self.img.rotate(90)
+		self.img = Image.fromarray(self.matrix, mode='L')
 		self.img = self.img.convert('1')
 		self.img.show()
-		self.img.save(f'training_images/{id}/{rd.random()}.png')
+		self.img.save(f'training_images/{id}/{tag}.png')
+		np.save(f'training_images/{id}/{tag}.npy', self.matrix)
 			
 				
 	def touch_began(self, touch):
@@ -54,9 +55,10 @@ class Display (Scene):
 		if loc in self.draw_area.frame:
 			p = de.Point(*loc, 10, parent=self)
 			self.dots.append(p)
-			t_x, t_y = loc
+			#t_x, t_y = loc
 			pt = self.draw_area.point_from_scene(loc) / 10
-			m_pt = int(pt.x), int(pt.y)
+			# backwards, because matrix row is the y-coord
+			m_pt = 28 - int(pt.y), int(pt.x)
 			self.matrix[m_pt] = 1
 		
 	def touch_ended(self, touch):

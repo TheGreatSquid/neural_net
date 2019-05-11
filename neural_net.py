@@ -7,7 +7,7 @@ import numpy as np
 import random as rd
 import time
 import os
-		
+
 
 Datum = nt('Datum', 'inputs, targets')
 
