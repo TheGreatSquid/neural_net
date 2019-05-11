@@ -2,6 +2,7 @@ import numpy as np
 import tkinter as tk
 import random as rd
 from PIL import Image
+from functools import partial
 
 
 WIDTH, HEIGHT = 1000, 800
@@ -42,14 +43,13 @@ def main():
 	
 	draw_area = tk.Canvas(root, bg='white')
 	draw_area.place(relx=.3, rely=.3, width=280, height=280)
-	draw_area.bind("<Button-1>", draw_pt)
+	draw_area.bind("<B1-Motion>", draw_pt)
 	
 	global buttons
 	for i in range(10):
-		b = tk.Button(root, text=f'{i}', bg='gray', command=lambda: save_image(id=i))
-		b.place(relx=.7, rely=.09*i, relwidth=.2, relheight=.1)
-		#b.bind("<Button-1>", command=lambda: save_image(id=i))
-	
+		with_arg = partial(save_image, i)
+		b = tk.Button(root, text=f'{i}', bg='gray', command=with_arg)
+		b.place(relx=.7, rely=.09*i, relwidth=.2, relheight=.1)	
 	
 	root.mainloop()
 
