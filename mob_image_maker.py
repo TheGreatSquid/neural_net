@@ -21,9 +21,9 @@ class Button (ShapeNode):
 		
 		if type(id) is int:
 			self.label = LabelNode(text=f'{id}', font=('<System>', min(WIDTH, HEIGHT)/20), position=(0,0), parent=self)
-		elif id is 'mode':
+		elif id == 'mode':
 			self.label = LabelNode(text='Saving to:\ntraining', font=('<System>', min(WIDTH, HEIGHT)/30), position=(0,0), parent=self)
-		elif id is 'close':
+		elif id == 'close':
 			self.label = LabelNode(text='Close and update', font=('<System>', min(WIDTH, HEIGHT)/30), position=(0,0), parent=self)
 
 
@@ -55,10 +55,10 @@ class Display (Scene):
 		self.img = Image.fromarray(self.matrix, mode='L')
 		self.img = self.img.convert('1')
 		self.img.show()
-		if self.mode is 'training':
+		if self.mode == 'training':
 			self.img.save(f'training_images/{id}/{tag}.png')
 			print(f'Saved to training/{id}.')
-		elif self.mode is 'testing':
+		elif self.mode == 'testing':
 			self.img.save(f'test_{id}.png')
 			print(f'Saved test image for {id}.')
 		#np.save(f'training_images/{id}/{tag}.npy', self.matrix)
