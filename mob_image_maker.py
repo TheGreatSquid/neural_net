@@ -36,8 +36,9 @@ class Display (Scene):
 		self.img = Image.fromarray(self.matrix, mode='L')
 		self.img = self.img.convert('1')
 		self.img.show()
-		self.img.save(f'training_images/{id}/{tag}.png')
-		np.save(f'training_images/{id}/{tag}.npy', self.matrix)
+		# self.img.save(f'training_images/{id}/{tag}.png')
+		self.img.save(f'test_{id}.png')
+		#np.save(f'training_images/{id}/{tag}.npy', self.matrix)
 			
 				
 	def touch_began(self, touch):
@@ -58,7 +59,7 @@ class Display (Scene):
 			#t_x, t_y = loc
 			pt = self.draw_area.point_from_scene(loc) / 10
 			# backwards, because matrix row is the y-coord
-			m_pt = 28 - int(pt.y), int(pt.x)
+			m_pt = (28 - int(pt.y))-1, int(pt.x)
 			self.matrix[m_pt] = 1
 		
 	def touch_ended(self, touch):

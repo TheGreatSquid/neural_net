@@ -22,11 +22,12 @@ def test(brain, target):
 	print(f'Testing number: {target}')
 	out = brain.feed_forward(test_in)
 	prediction = np.where(out == max(out))
-	print(f'Brain thinks this is a: {prediction[0]}')
+	print(f'Brain thinks this is a: {prediction[0][0]}')
+	print(out.astype(float))
 
 
 def main():
-	brain = nn.NeuralNetwork(784, 50, 10)
+	brain = nn.NeuralNetwork(784, 64, 10)
 	data_start = time.time()
 	
 	img_data = []
@@ -35,8 +36,8 @@ def main():
 		# just for testing purposes
 		if last_char == '/':
 			continue
-		if int(last_char) > 6:
-			continue
+		#if int(last_char) is not 0 and int(last_char) is not 2:
+			#continue
 		for file in files:
 			if file == 'readme.txt':
 				continue
@@ -53,15 +54,15 @@ def main():
 	
 	train_start = time.time()
 	# train
-	for _ in range(10000):
+	for _ in range(50000):
 		datum = rd.choice(img_data)
 		brain.train(datum.inputs, datum.targets)
 	
 	train_end = time.time()
 	print(f'Time to train: {train_end - train_start}')
 	# test
-	test(brain, 1)
-	test(brain, 6)
+	for i in range(10):
+		test(brain, i)
 	
 
 if __name__ == '__main__': 
