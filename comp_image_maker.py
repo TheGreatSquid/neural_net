@@ -48,7 +48,7 @@ def main():
 	for i in range(10):
 		b = tk.Button(root, text=f'{i}', bg='gray')
 		b.place(relx=.7, rely=.09*i, relwidth=.2, relheight=.1)
-		b.bind("<Button-1>", lambda: save_image(id=i))
+		b.bind("<Button-1>", lambda event: save_image(id=i))
 	
 	
 	root.mainloop()
