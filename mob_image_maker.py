@@ -36,8 +36,8 @@ class Display (Scene):
 		self.img = Image.fromarray(self.matrix, mode='L')
 		self.img = self.img.convert('1')
 		self.img.show()
-		# self.img.save(f'training_images/{id}/{tag}.png')
-		self.img.save(f'test_{id}.png')
+		self.img.save(f'training_images/{id}/{tag}.png')
+		# self.img.save(f'test_{id}.png')
 		#np.save(f'training_images/{id}/{tag}.npy', self.matrix)
 			
 				
