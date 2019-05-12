@@ -28,7 +28,6 @@ class GUI (object):
 		self.draw_area.bind("<B1-Motion>", self.draw_pt)
 		
 		for i in range(10):
-			#self.with_arg = partialmethod(self.save_image, i)
 			b = tk.Button(root, text=f'{i}', bg='gray', command=lambda i=i: self.save_image(i))
 			b.place(relx=.7, rely=.09*i, relwidth=.2, relheight=.1)	
 			self.buttons.append(b)
@@ -45,7 +44,8 @@ class GUI (object):
 	
 	def change_mode(self):
 		self.mode = self.mode_switch[self.mode]
-		print(self.mode)
+		self.mode_button['text'] = f'Saving to:\n{self.mode}'
+		#print(self.mode)
 	
 	def save_image(self, id):
 		tag = rd.random()
