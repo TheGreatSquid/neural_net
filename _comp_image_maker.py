@@ -17,7 +17,7 @@ class GUI (object):
 		self.mode = 'training'
 		
 		
-		root = self.root = Tk.tk()
+		root = self.root = tk.Tk()
 		root.protocol("WM_DELETE_WINDOW", self.update_readmes)
 	
 		self.cv = tk.Canvas(root, width=WIDTH, height=HEIGHT, bd=5, bg='gray')
