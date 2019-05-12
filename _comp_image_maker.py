@@ -29,7 +29,7 @@ class GUI (object):
 		
 		for i in range(10):
 			with_arg = partialmethod(self.save_image, i)
-			b = tk.Button(root, text=f'{i}', bg='gray', command=self.with_arg)
+			b = tk.Button(root, text=f'{i}', bg='gray', command=with_arg)
 			b.place(relx=.7, rely=.09*i, relwidth=.2, relheight=.1)	
 			self.buttons.append(b)
 		
