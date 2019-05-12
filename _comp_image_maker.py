@@ -40,10 +40,12 @@ class GUI (object):
 
 	def update_readmes(self):
 		ctd.count_training_data()
+		print('counting data')
 		self.root.destroy()	
 	
 	def change_mode(self):
 		self.mode = self.mode_switch[self.mode]
+		print(self.mode)
 	
 	def save_image(self, id):
 		tag = rd.random()
