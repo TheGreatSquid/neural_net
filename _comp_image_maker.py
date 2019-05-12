@@ -25,7 +25,7 @@ class GUI (object):
 		
 		self.draw_area = tk.Canvas(root, bg='white')
 		self.draw_area.place(relx=.3, rely=.3, width=280, height=280)
-		self.draw_area.bind("<B1-Motion>", draw_pt)
+		self.draw_area.bind("<B1-Motion>", self.draw_pt)
 		
 		for i in range(10):
 			with_arg = partial(self.save_image, i)
@@ -33,7 +33,7 @@ class GUI (object):
 			b.place(relx=.7, rely=.09*i, relwidth=.2, relheight=.1)	
 			self.buttons.append(b)
 		
-		self.mode_button = tk.Button(root, text=f'Saving to:\n{self.mode}', bg='red', command=change_mode)
+		self.mode_button = tk.Button(root, text=f'Saving to:\n{self.mode}', bg='red', command=self.change_mode)
 		self.mode_button.place(relx=.7, rely=.2, relwidth=.2, relheight=.1)
 		self.buttons.append(self.mode_button)
 
