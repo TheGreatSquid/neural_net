@@ -58,7 +58,7 @@ def main():
 	for i in range(100):
 		brain.train_epoch(img_data)
 	'''
-	for _ in range(10000):
+	for _ in range(100000):
 		datum = rd.choice(img_data)
 		brain.train(datum.inputs, datum.targets)
 	
