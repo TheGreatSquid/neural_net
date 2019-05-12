@@ -1,1 +1,1 @@
-Number of images: 10
+Number of images: 11

@@ -85,4 +85,10 @@ class NeuralNetwork:
 		# apply hidden deltas (just hidden gradients for bias)
 		self.weights_in_hid += weights_in_hid_delta
 		self.bias_hid += hidden_gradients
-
+		
+	def train_epoch(self, data):
+		rd.shuffle(data)
+			
+		for datum in data:
+			self.train(datum.inputs, datum.targets)
+			
