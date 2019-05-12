@@ -38,14 +38,14 @@ class GUI (object):
 		self.buttons.append(self.mode_button)
 
 
-	def update_readmes():
+	def update_readmes(self):
 		ctd.count_training_data()
 		self.root.destroy()	
 	
-	def change_mode():
+	def change_mode(self):
 		self.mode = self.mode_switch[self.mode]
 	
-	def save_image(id):
+	def save_image(self, id):
 		tag = rd.random()
 		self.matrix = (self.matrix * 255).astype(np.uint8)
 		img = Image.fromarray(self.matrix, mode='L')
@@ -62,7 +62,7 @@ class GUI (object):
 		self.draw_area.delete("all")
 		self.matrix = np.zeros_like(self.matrix)	
 	
-	def draw_pt(event):
+	def draw_pt(self, event):
 		x, y = event.x, event.y
 		w = event.widget
 		
