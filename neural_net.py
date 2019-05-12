@@ -52,10 +52,13 @@ def main():
 	
 	data_end = time.time()
 	print(f'Time to parse data: {data_end - data_start}')
-	
-	train_start = time.time()
 	# train
-	for _ in range(20000):
+	train_start = time.time()
+	'''
+	for i in range(100):
+		brain.train_epoch(img_data)
+	'''
+	for _ in range(10000):
 		datum = rd.choice(img_data)
 		brain.train(datum.inputs, datum.targets)
 	
