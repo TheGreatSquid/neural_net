@@ -3,7 +3,7 @@ import tkinter as tk
 import random as rd
 import count_training_data as ctd
 from PIL import Image
-from functools import partial
+from functools import partial, partialmethod
 
 
 WIDTH, HEIGHT = 1000, 800
@@ -28,13 +28,13 @@ class GUI (object):
 		self.draw_area.bind("<B1-Motion>", self.draw_pt)
 		
 		for i in range(10):
-			with_arg = partial(self.save_image, i)
-			b = tk.Button(root, text=f'{i}', bg='gray', command=with_arg)
+			with_arg = partialmethod(save_image, i)
+			b = tk.Button(root, text=f'{i}', bg='gray', command=self.with_arg)
 			b.place(relx=.7, rely=.09*i, relwidth=.2, relheight=.1)	
 			self.buttons.append(b)
 		
 		self.mode_button = tk.Button(root, text=f'Saving to:\n{self.mode}', bg='red', command=self.change_mode)
-		self.mode_button.place(relx=.7, rely=.2, relwidth=.2, relheight=.1)
+		self.mode_button.place(relx=.2, rely=.7, relwidth=.2, relheight=.1)
 		self.buttons.append(self.mode_button)
 
 
