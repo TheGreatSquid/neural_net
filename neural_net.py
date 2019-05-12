@@ -28,6 +28,7 @@ def test(brain, target):
 
 def main():
 	brain = nn.NeuralNetwork(784, 64, 10)
+	brain.learning_rate = 0.3
 	data_start = time.time()
 	
 	img_data = []
@@ -54,13 +55,14 @@ def main():
 	
 	train_start = time.time()
 	# train
-	for _ in range(50000):
+	for _ in range(20000):
 		datum = rd.choice(img_data)
 		brain.train(datum.inputs, datum.targets)
 	
 	train_end = time.time()
 	print(f'Time to train: {train_end - train_start}')
 	# test
+	np.set_printoptions(suppress=True)
 	for i in range(10):
 		test(brain, i)
 	
