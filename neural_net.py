@@ -5,6 +5,7 @@ import neural_net_mod as nn
 import math
 import numpy as np
 import random as rd
+import argparse
 import time
 import os
 
@@ -26,9 +27,9 @@ def test(brain, target):
 	print(out.astype(float))
 
 
-def main():
+def main(args):
 	brain = nn.NeuralNetwork(784, 64, 10)
-	brain.learning_rate = 0.3
+	brain.learning_rate = args.learningrate
 	data_start = time.time()
 	
 	img_data = []
@@ -59,7 +60,7 @@ def main():
 	for i in range(100):
 		brain.train_epoch(img_data)
 	'''
-	for _ in range(100000):
+	for _ in range(args.iterations):
 
 		datum = rd.choice(img_data)
 		brain.train(datum.inputs, datum.targets)
@@ -67,10 +68,25 @@ def main():
 	train_end = time.time()
 	print(f'Time to train: {train_end - train_start}')
 	# test
+	testing = True
+	
 	np.set_printoptions(suppress=True)
 	for i in range(10):
 		test(brain, i)
 	
+	while testing:
+		i = input('Number to test: ')
+		
+		if i == 'QUIT':
+			testing = False
+			
+		test(brain, int(i))
 
-if __name__ == '__main__': 
-	main()
+
+if __name__ == '__main__':
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--learningrate', '-l', type=float, default=0.3, help='Brain learning rate; should be (0, 1)')
+	parser.add_argument('--iterations', '-i', type=int, default=10000, help='Number of iterations to train')	
+	
+	args = parser.parse_args()
+	main(args)
