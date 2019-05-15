@@ -57,7 +57,7 @@ def main(args):
 	# train
 
 	train_start = time.time()
-	'''
+	
 	for i in range(100):
 		brain.train_epoch(img_data)
 	'''
@@ -65,7 +65,7 @@ def main(args):
 
 		datum = rd.choice(img_data)
 		brain.train(datum.inputs, datum.targets)
-	
+	'''
 	train_end = time.time()
 	print(f'Time to train: {train_end - train_start}')
 	# test
@@ -75,16 +75,6 @@ def main(args):
 	for i in range(10):
 		test(brain, i)
 	
-	'''
-	while testing:
-		i = input('Number to test: ')
-		
-		if i == 'QUIT':
-			testing = False
-		
-		image_maker.main(brain)	
-		#test(brain, int(i))
-	'''
 	image_maker.main(brain)	
 	
 
