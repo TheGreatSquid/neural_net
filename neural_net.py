@@ -75,6 +75,7 @@ def main(args):
 	for i in range(10):
 		test(brain, i)
 	
+	'''
 	while testing:
 		i = input('Number to test: ')
 		
@@ -83,7 +84,9 @@ def main(args):
 		
 		image_maker.main(brain)	
 		#test(brain, int(i))
-
+	'''
+	image_maker.main(brain)	
+	
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()

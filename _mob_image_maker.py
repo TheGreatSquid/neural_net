@@ -25,7 +25,7 @@ def test(brain, target):
 	out = brain.feed_forward(test_in)
 	prediction = np.where(out == max(out))
 	print(f'Brain thinks this is a: {prediction[0][0]}')
-	print(out.astype(float))
+	#print(out.astype(float))
 
 
 class Button (ShapeNode):
