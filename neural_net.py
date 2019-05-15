@@ -2,6 +2,7 @@
 from collections import namedtuple as nt
 from PIL import Image
 import neural_net_mod as nn
+import image_maker
 import math
 import numpy as np
 import random as rd
@@ -79,8 +80,9 @@ def main(args):
 		
 		if i == 'QUIT':
 			testing = False
-			
-		test(brain, int(i))
+		
+		image_maker.main(brain)	
+		#test(brain, int(i))
 
 
 if __name__ == '__main__':

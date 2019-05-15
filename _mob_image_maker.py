@@ -14,6 +14,20 @@ import draw_ext as de
 WIDTH, HEIGHT = get_window_size()
 
 
+def test(brain, target):
+	try:
+		test_img = Image.open(f'test_{target}.png')
+	except:
+		print(f'Test image for {target} does not exist.')
+	
+	test_in = list(np.array(test_img.getdata()) / 255)
+	print(f'Testing number: {target}')
+	out = brain.feed_forward(test_in)
+	prediction = np.where(out == max(out))
+	print(f'Brain thinks this is a: {prediction[0][0]}')
+	print(out.astype(float))
+
+
 class Button (ShapeNode):
 	def __init__(self, id, *args, **kwargs):
 		super().__init__(*args, **kwargs)
@@ -21,33 +35,41 @@ class Button (ShapeNode):
 		
 		if type(id) is int:
 			self.label = LabelNode(text=f'{id}', font=('<System>', min(WIDTH, HEIGHT)/20), position=(0,0), parent=self)
-		elif id == 'mode':
+		elif id == 'training':
 			self.label = LabelNode(text='Saving to:\ntraining', font=('<System>', min(WIDTH, HEIGHT)/30), position=(0,0), parent=self)
+		elif id == 'testing':
+			self.label = LabelNode(text='Saving to:\ntesting', font=('<System>', min(WIDTH, HEIGHT)/30), position=(0,0), parent=self)
 		elif id == 'close':
 			self.label = LabelNode(text='Close and update', font=('<System>', min(WIDTH, HEIGHT)/30), position=(0,0), parent=self)
 
 
-class Display (Scene):
+class Display (Scene):	
+	def __init__(self, brain, *args, **kwargs):
+		self.brain = brain
+		super().__init__(*args, **kwargs)
+	
 	def setup(self):
 		de.rect_mode = de.CORNER
 		self.draw_area = de.Rect(WIDTH*.4, HEIGHT*.4, 280, 280, fill_color='transparent', stroke_color='red')
 		self.add_child(self.draw_area)
 		
+		self.mode_switch = dict(training='testing', testing='training')
+		if self.brain:
+			self.mode = 'testing'
+		else:
+			self.mode = 'training'		
+		
 		p = Path.rounded_rect(0, 0, WIDTH*.2, HEIGHT*.09, 5)
 		self.buttons = [Button(i, path=p, position=(WIDTH*.85, (i+.5)*(HEIGHT/10)), fill_color='green', parent=self) for i in range(10)]
 		p = Path.rounded_rect(0, 0, WIDTH*.2, HEIGHT*.1, 5)
-		self.mode_button = Button('mode', path=p, position=(WIDTH*.15, HEIGHT*.15), fill_color='#1e6cff', parent=self)
+		self.mode_button = Button(f'{self.mode}', path=p, position=(WIDTH*.15, HEIGHT*.15), fill_color='#1e6cff', parent=self)
 		self.buttons.append(self.mode_button)
 		self.close_button = Button('close', path=p, position=(WIDTH*.15, HEIGHT*.75), fill_color='#ff0f0f', parent=self)
 		self.buttons.append(self.close_button)
-		
-		
+				
 		self.matrix = np.zeros((28, 28))
 		self.img = None
-		self.dots = []
-		
-		self.mode_switch = dict(training='testing', testing='training')
-		self.mode = 'training'
+		self.dots = []		
 	
 	def save_image(self, id):
 		tag = rd.random()
@@ -61,10 +83,17 @@ class Display (Scene):
 		elif self.mode == 'testing':
 			self.img.save(f'test_{id}.png')
 			print(f'Saved test image for {id}.')
+			
+			if self.brain:
+				test(self.brain, int(id))
 		#np.save(f'training_images/{id}/{tag}.npy', self.matrix)
 			
 	
 	def change_mode(self):
+		if self.brain:
+			print('Cannot change mode right now.')
+			return
+			
 		self.mode = self.mode_switch[self.mode]	
 		self.mode_button.label.text = f'Saving to:\n{self.mode}'
 	
@@ -104,7 +133,10 @@ class Display (Scene):
 	def touch_ended(self, touch):
 		pass
 
-def main():
-	run(Display(), show_fps=True)
 
-if __name__ == '__main__': main()
+def main(brain):
+	run(Display(brain), show_fps=True)
+
+
+if __name__ == '__main__': 
+	main(None)

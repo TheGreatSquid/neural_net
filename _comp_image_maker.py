@@ -9,13 +9,31 @@ from functools import partial, partialmethod
 WIDTH, HEIGHT = 1000, 800
 
 
+def test(brain, target):
+	try:
+		test_img = Image.open(f'test_{target}.png')
+	except:
+		print(f'Test image for {target} does not exist.')
+	
+	test_in = list(np.array(test_img.getdata()) / 255)
+	print(f'Testing number: {target}')
+	out = brain.feed_forward(test_in)
+	prediction = np.where(out == max(out))
+	print(f'Brain thinks this is a: {prediction[0][0]}')
+	print(out.astype(float))
+
+
 class GUI (object):
-	def __init__(self):
+	def __init__(self, brain=None):
 		self.buttons = []
 		self.matrix = np.zeros((28,28))
 		self.mode_switch = dict(training='testing', testing='training')
-		self.mode = 'training'
-		
+		if brain:
+			self.mode = 'testing'
+			self.brain = brain
+		else:
+			self.mode = 'training'
+			self.brain = None		
 		
 		root = self.root = tk.Tk()
 		root.protocol("WM_DELETE_WINDOW", self.update_readmes)
@@ -43,9 +61,12 @@ class GUI (object):
 		self.root.destroy()	
 	
 	def change_mode(self):
+		if self.brain:
+			print('Cannot change mode right now.')
+			return
+		
 		self.mode = self.mode_switch[self.mode]
 		self.mode_button['text'] = f'Saving to:\n{self.mode}'
-		#print(self.mode)
 	
 	def save_image(self, id):
 		tag = rd.random()
@@ -60,6 +81,9 @@ class GUI (object):
 		elif self.mode == 'testing':
 			img.save(f'test_{id}.png')
 			print('Saved test image for {id}.')
+			# if called from neural_net.py, make a prediction
+			if self.brain:
+				test(self.brain, int(id))
 	
 		self.draw_area.delete("all")
 		self.matrix = np.zeros_like(self.matrix)	
@@ -76,10 +100,10 @@ class GUI (object):
 		self.matrix[m_0][m_1] = 1
 
 
-def main():
-	gui = GUI()	
+def main(brain):
+	gui = GUI(brain)	
 	gui.root.mainloop()
 
 
 if __name__ == '__main__':
-	main()
+	main(None)

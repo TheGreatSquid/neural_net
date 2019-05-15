@@ -4,7 +4,7 @@ import os
 import sys
 
 
-def main():
+def main(brain):
 	plat = sys.platform
 	
 	if plat == 'ios':
@@ -12,7 +12,8 @@ def main():
 	elif plat == 'darwin':
 		import _comp_image_maker as img_maker
 		
-	img_maker.main()
+	img_maker.main(brain)
 		
 
-if __name__ == '__main__': main()
+if __name__ == '__main__': 
+	main(None)
