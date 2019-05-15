@@ -1,1 +1,1 @@
-Number of images: 24
+Number of images: 37
