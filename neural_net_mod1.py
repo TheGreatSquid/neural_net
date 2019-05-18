@@ -86,9 +86,14 @@ class NeuralNetwork:
 		self.weights_in_hid += weights_in_hid_delta
 		self.bias_hid += hidden_gradients
 		
-	def train_epoch(self, data):
+	def train_epoch(self, inputs, targets):
+		'''
 		rd.shuffle(data)
 			
 		for datum in data:
 			self.train(datum.inputs, datum.targets)
+			
+		'''
+		for k, input in enumerate(inputs):
+			self.train(input.copy(), targets[k].copy())
 			

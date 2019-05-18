@@ -1,7 +1,6 @@
-
 from collections import namedtuple as nt
 from PIL import Image
-import neural_net_mod as nn
+import neural_net_mod1 as nn
 import image_maker
 import math
 import numpy as np
@@ -54,10 +53,28 @@ def main(args):
 	
 	data_end = time.time()
 	print(f'Time to parse data: {data_end - data_start}')
+	
+	npy_inputs = np.load('training_images/mnist_images.npy')
+	npy_labels = np.load('training_images/mnist_labels.npy')
+
+	img = Image.fromarray(npy_inputs[0])
+	img.show()
+	
+	npy_targets = np.zeros((60000, 10, 1))
+	for k, lbl in enumerate(npy_labels):
+		npy_targets[k][lbl] = 1
+	
+	npy_inputs = npy_inputs.reshape((60000, 784, 1))
+	npy_inputs = npy_inputs.astype(np.float16) / 255
 	# train
 
 	train_start = time.time()
+	if args.epochs:
+		print(f'Training for {args.epochs} epochs.')
 	
+		for i in range(args.epochs):
+			brain.train_epoch(npy_inputs, npy_targets)
+	'''
 	if args.epochs:
 		print(f'Training for {args.epochs} epochs.')
 	
@@ -68,12 +85,11 @@ def main(args):
 		for _ in range(args.iterations):
 			datum = rd.choice(img_data)
 			brain.train(datum.inputs, datum.targets)
+	'''
 	
 	train_end = time.time()
 	print(f'Time to train: {train_end - train_start}')
-	# test
-	testing = True
-	
+	# test	
 	np.set_printoptions(suppress=True)
 	for i in range(10):
 		test(brain, i)
