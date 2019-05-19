@@ -57,14 +57,17 @@ def main(args):
 	# train
 
 	train_start = time.time()
-	'''
-	for i in range(100):
-		brain.train_epoch(img_data)
-	'''
-	for _ in range(args.iterations):
-
-		datum = rd.choice(img_data)
-		brain.train(datum.inputs, datum.targets)
+	
+	if args.epochs:
+		print(f'Training for {args.epochs} epochs.')
+	
+		for i in range(args.epochs):
+			brain.train_epoch(img_data)
+	elif args.iterations:
+		print(f'Training for {args.iterations} random iterations.')
+		for _ in range(args.iterations):
+			datum = rd.choice(img_data)
+			brain.train(datum.inputs, datum.targets)
 	
 	train_end = time.time()
 	print(f'Time to train: {train_end - train_start}')
@@ -75,23 +78,18 @@ def main(args):
 	for i in range(10):
 		test(brain, i)
 	
-	'''
-	while testing:
-		i = input('Number to test: ')
-		
-		if i == 'QUIT':
-			testing = False
-		
-		image_maker.main(brain)	
-		#test(brain, int(i))
-	'''
 	image_maker.main(brain)	
 	
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--learningrate', '-l', type=float, default=0.3, help='Brain learning rate; should be (0, 1)')
-	parser.add_argument('--iterations', '-i', type=int, default=10000, help='Number of iterations to train')	
-	
+	group = parser.add_mutually_exclusive_group()
+	group.add_argument('--iterations', '-i', type=int, help='Number of iterations to train')
+	group.add_argument('--epochs', '-e', type=int, help='Number of epochs to train')	
 	args = parser.parse_args()
+	
+	if not args.epochs and not args.iterations:
+		args.iterations = 10000
+
 	main(args)
